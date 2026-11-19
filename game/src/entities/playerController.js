@@ -149,11 +149,13 @@ export class PlayerController {
       } else if (input.mouseClicked(0) && G.audio) G.audio.sfx.dryFire();
     }
 
-    // vehicles
-    if (input.pressed('KeyF')) {
-      const v = G.vehicles.findEnterable(ch.pos);
-      if (v) this.enterVehicle(v);
+    // vehicles: prompt when one is in reach, F to get in
+    const near = G.vehicles.findEnterable(ch.pos);
+    if (near && G.hud && !G.dialogue.active) {
+      const verb = near.owned ? 'get in' : near.mode === 'rail' ? 'carjack' : 'steal';
+      G.hud.hint(`Press F to ${verb} the ${near.T.name}`);
     }
+    if (input.pressed('KeyF') && near) this.enterVehicle(near);
   }
 
   startReload() {

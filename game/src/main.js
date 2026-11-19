@@ -136,13 +136,21 @@ function boot() {
   }
   G.radio.playTitleTheme(true);
   G.session.showTitle();
+  if (params.get('debug')) {
+    // ?debug=1: surface runtime errors on screen; ?debug=play also starts a game straight away
+    setInterval(() => {
+      document.getElementById('errlog').textContent = `${G.state} t=${G.time.toFixed(1)} chars=${G.characters.length} cars=${G.vehicles.list.length}\n` + window.__errors.join('\n');
+    }, 500);
+    if (params.get('debug') === 'play') G.session.begin(false);
+  }
   document.addEventListener('click', () => {
     if (G.state === 'title') { G.audio.init(); G.radio.ensureRunning(); }
   }, { once: true });
   let last = performance.now();
   const frame = (now) => {
-    const dt = Math.min(0.05, (now - last) / 1000);
-    last = now;
+    // rAF timestamps can precede the performance.now() taken at boot: never step backwards
+    const dt = Math.max(0, Math.min(0.05, (now - last) / 1000));
+    last = Math.max(last, now);
     step(G, dt);
     render(G);
     requestAnimationFrame(frame);
