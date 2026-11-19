@@ -1,0 +1,11 @@
+{
+  "name": "palmwire-city",
+  "private": true,
+  "description": "Palmwire City - an original open-world crime game (make.fun gta6-01 entry)",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "serve": "node serve.ts",
+    "build": "node main.ts"
+  }
+}
