@@ -6,7 +6,7 @@ import { Character } from '../entities/character.js';
 import { copLook } from '../entities/characterLooks.js';
 import { PoliceHeli } from './policeHeli.js';
 import { angleDiff, clamp } from '../core/mathUtil.js';
-import { HALF_ROAD, CELL, LANE_OFF } from '../world/cityLayout.js';
+import { HALF_ROAD } from '../world/cityLayout.js';
 
 const CARS_FOR_STARS = [0, 1, 2, 3, 4, 5];
 
@@ -161,11 +161,9 @@ export class PoliceSystem {
         const from = v.ai.waypoint || here;
         v.ai.waypoint = this.net.node(this.net.nextToward(from.id, there.id));
       }
-      const w = v.ai.waypoint;
-      // aim for the right-hand lane short of the junction
-      const ddx = w.x - v.pos.x, ddz = w.z - v.pos.z, dl = Math.hypot(ddx, ddz) || 1;
-      aimX = w.x - (ddz / dl) * LANE_OFF * 0;
-      aimZ = w.z + (ddx / dl) * LANE_OFF * 0;
+      // cruisers run down the middle of the road with sirens on, junction to junction
+      aimX = v.ai.waypoint.x;
+      aimZ = v.ai.waypoint.z;
     } else {
       v.ai.waypoint = null;
       const tv = pl.vehicle;
@@ -255,5 +253,3 @@ export class PoliceSystem {
     this.heli.deactivate();
   }
 }
-
-export { CELL };

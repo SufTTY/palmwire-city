@@ -32,6 +32,23 @@ export class EffectsSystem {
     scene.add(this.flashLight);
     this.boomLight = new THREE.PointLight(0xff8a3a, 0, 45, 1.6);
     scene.add(this.boomLight);
+    // the player's headlights: one real spotlight that follows whatever they drive
+    this.headlight = new THREE.SpotLight(0xfff0d0, 0, 80, 0.5, 0.55, 1.2);
+    this.headlightTarget = new THREE.Object3D();
+    scene.add(this.headlight, this.headlightTarget);
+    this.headlight.target = this.headlightTarget;
+  }
+
+  updateHeadlights() {
+    const G = this.G;
+    const v = G.player.vehicle;
+    const on = v && !v.isWreck && G.sky.night > 0.25;
+    this.headlight.intensity = on ? 900 * G.sky.night : 0;
+    if (!on) return;
+    const fx = v.fx, fz = v.fz;
+    this.headlight.position.set(v.pos.x + fx * (v.T.len / 2), v.pos.y + 0.9, v.pos.z + fz * (v.T.len / 2));
+    this.headlightTarget.position.set(v.pos.x + fx * 25, v.pos.y - 1, v.pos.z + fz * 25);
+    this.headlightTarget.updateMatrixWorld();
   }
 
   shake(a) { this.shakeAmount = Math.min(1.5, this.shakeAmount + a); }
@@ -86,6 +103,7 @@ export class EffectsSystem {
     this.particles.update(dt);
     this.marks.update(dt);
     this.vehicleEffects(dt);
+    this.updateHeadlights();
     let any = false;
     for (let k = 0; k < MAX_TRACERS; k++) {
       if (this.tracerLife[k] <= 0) continue;

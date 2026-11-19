@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import { MeshBuilder } from './meshBuilder.js';
 import { makeRng } from '../core/rng.js';
 import {
-  CELL, HALF_ROAD, SIDEWALK, CURB_Y, CITY, BEACH_END, QUAY_END, POINT_END, N, parkHillHeight,
+  CELL, HALF_ROAD, SIDEWALK, CURB_Y, CITY, BEACH_END, QUAY_END, POINT_END, parkHillHeight,
 } from './cityLayout.js';
 
 const LOT_MATERIAL = {
@@ -82,7 +82,7 @@ export function buildGround(scene, layout, tex, colliders) {
       const za = s.z0 + HALF_ROAD, zb = s.z1 - HALF_ROAD;
       roadB.quad([[mx - HALF_ROAD, 0, zb], [mx + HALF_ROAD, 0, zb], [mx + HALF_ROAD, 0, za], [mx - HALF_ROAD, 0, za]], [0, 1, 0], [[0, vl], [1, vl], [1, 0], [0, 0]], 0xffffff);
     }
-    if (s.bridge) addBridgeSpan(builder('bridge'), colliders, s, rng);
+    if (s.bridge) addBridgeSpan(builder('bridge'), colliders, s);
     else builder('concrete').box(mx, -2.01, mz, s.axis === 'h' ? len : HALF_ROAD * 2, 4, s.axis === 'h' ? HALF_ROAD * 2 : len, 0x8f8a82, { uv: [8, 8], faces: 'sides' });
   }
   for (const n of layout.nodeList) {
@@ -95,7 +95,7 @@ export function buildGround(scene, layout, tex, colliders) {
     if (n.bridge) {
       const bb = builder('bridge');
       bb.box(x, -0.5, z, h * 2, 0.98, h * 2, 0xd9d2c5);
-      addBridgeRails(bb, colliders, x - h, x + h, z, 'h');
+      addBridgeRails(bb, colliders, x - h, x + h, z);
     } else {
       builder('concrete').box(x, -2.01, z, h * 2, 4, h * 2, 0x8f8a82, { uv: [8, 8], faces: 'sides' });
     }
@@ -133,25 +133,24 @@ export function buildGround(scene, layout, tex, colliders) {
   return { group, mats };
 }
 
-function addBridgeRails(b, colliders, xa, xb, z, axis) {
+/** Railings (with colliders) along both edges of an east-west bridge deck. */
+function addBridgeRails(b, colliders, xa, xb, z) {
   for (const side of [-1, 1]) {
     const rz = z + side * (HALF_ROAD - 0.25);
     b.box((xa + xb) / 2, 0.55, rz, xb - xa, 1.1, 0.35, 0xf2efe8);
     b.box((xa + xb) / 2, -0.95, rz, xb - xa, 0.3, 1.2, 0xb8b2a6);
     if (colliders) colliders.addBox(xa, rz - 0.3, xb, rz + 0.3, 1.2, -2);
   }
-  void axis;
 }
 
-function addBridgeSpan(b, colliders, s, rng) {
+function addBridgeSpan(b, colliders, s) {
   const xa = s.x0 + HALF_ROAD, xb = s.x1 - HALF_ROAD, z = s.z0;
   b.box((xa + xb) / 2, -0.5, z, xb - xa, 0.98, HALF_ROAD * 2, 0xd9d2c5);
-  addBridgeRails(b, colliders, xa, xb, z, 'h');
+  addBridgeRails(b, colliders, xa, xb, z);
   for (let x = s.x0 + 20; x < s.x1; x += 40) {
     b.box(x, -4, z, 2.4, 7, 7, 0xc9c1b2);
     b.box(x, -7, z, 3.4, 1, 8, 0x8a8478);
   }
-  void rng;
 }
 
 /** The A-frame pylon and fanned cables at the middle of the Pelican Bay bridge. */
@@ -185,17 +184,16 @@ function addBridgePylon(b, colliders, x, z) {
 /** Low green-gold hills around the north and west horizon. */
 function buildBackdropHills(rng) {
   const b = new MeshBuilder();
-  const cone = new THREE.ConeGeometry(1, 1, 7, 1);
-  cone.translate(0, 0.5, 0);
+  // rounded domes rather than cones, so the horizon reads as rolling coastal hills
+  const dome = new THREE.SphereGeometry(1, 14, 6, 0, Math.PI * 2, 0, Math.PI / 2);
   const place = (x, z) => {
-    const r = rng.range(120, 260), h = rng.range(40, 120);
+    const r = rng.range(140, 280), h = rng.range(35, 85);
     const m = new THREE.Matrix4().compose(new THREE.Vector3(x, -2, z), new THREE.Quaternion().setFromEuler(new THREE.Euler(0, rng() * 6, 0)), new THREE.Vector3(r, h, r * rng.range(0.7, 1.2)));
-    b.geometry(cone, m, rng.pick([0x7f8f55, 0x8e9a5c, 0x9a925a, 0x6f8250]));
+    b.geometry(dome, m, rng.pick([0x7f8f55, 0x8e9a5c, 0x9a925a, 0x6f8250]));
   };
   for (let k = 0; k < 14; k++) place(rng.range(-700, CITY + 100), rng.range(-750, -420));
   for (let k = 0; k < 10; k++) place(rng.range(-750, -420), rng.range(-500, CITY));
   const mesh = new THREE.Mesh(b.build(), new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 1, flatShading: true }));
   mesh.name = 'backdrop-hills';
-  void N;
   return mesh;
 }

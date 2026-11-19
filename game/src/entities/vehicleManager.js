@@ -71,7 +71,7 @@ export class VehicleManager {
       v.update(dt);
     }
     this.collideVehicles();
-    this.collideCharacters(dt);
+    this.collideCharacters();
     // recycle abandoned cars far away
     const p = G.player.pos;
     for (let k = this.list.length - 1; k >= 0; k--) {
@@ -138,7 +138,7 @@ export class VehicleManager {
     }
   }
 
-  collideCharacters(dt) {
+  collideCharacters() {
     const G = this.G;
     for (const ch of G.characters) {
       if (ch.inVehicle || ch.removed) continue;
@@ -167,6 +167,5 @@ export class VehicleManager {
         }
       }
     }
-    void dt;
   }
 }

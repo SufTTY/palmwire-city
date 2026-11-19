@@ -73,7 +73,7 @@ export class Menus {
     this.screen = s;
   }
 
-  showPause(tab = 'menu') {
+  showPause() {
     this.clear();
     const G = this.G;
     const s = document.createElement('div');
@@ -101,7 +101,6 @@ export class Menus {
     s.appendChild(side);
     this.root.appendChild(s);
     this.screen = s;
-    void tab;
   }
 
   showPanel(kind, back) {

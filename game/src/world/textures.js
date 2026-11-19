@@ -201,11 +201,12 @@ function roofTexture() {
 // ---- Facades: 512 px = 8 bays x 8 floors = 28 m square of wall. -------------------------------
 const FACADE_CELL = 64;
 
-function windowGlass(ctx, x, y, w, h, tint = [42, 60, 78]) {
+function windowGlass(ctx, x, y, w, h, tint = [64, 96, 122]) {
+  // sky reflection at the top fading into the room behind the glass
   const g = ctx.createLinearGradient(x, y, x + w * 0.6, y + h);
-  g.addColorStop(0, `rgb(${tint[0] + 70},${tint[1] + 80},${tint[2] + 90})`);
-  g.addColorStop(0.45, `rgb(${tint[0]},${tint[1]},${tint[2]})`);
-  g.addColorStop(1, `rgb(${tint[0] - 15},${tint[1] - 20},${tint[2] - 20})`);
+  g.addColorStop(0, `rgb(${tint[0] + 110},${tint[1] + 105},${tint[2] + 100})`);
+  g.addColorStop(0.4, `rgb(${tint[0] + 20},${tint[1] + 24},${tint[2] + 28})`);
+  g.addColorStop(1, `rgb(${tint[0] - 20},${tint[1] - 26},${tint[2] - 26})`);
   ctx.fillStyle = g;
   ctx.fillRect(x, y, w, h);
 }

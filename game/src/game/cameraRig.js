@@ -49,9 +49,9 @@ export class CameraRig {
     let dist, height, shoulder = 0, fovT = 68;
     if (v) {
       const sp = v.absSpeed;
+      // with the mouse at rest the camera swings back behind the car
       if (this.idleMouse > 1.0 && (sp > 3 || this.idleMouse > 3)) {
-        const moveYaw = v.speed < -1 ? v.heading + Math.PI : v.heading;
-        this.yaw = dampAngle(this.yaw, v.speed < -1 ? v.heading : moveYaw, 2.6, dt);
+        this.yaw = dampAngle(this.yaw, v.heading, 2.6, dt);
         this.pitch = damp(this.pitch, 0.16, 2, dt);
       }
       dist = (v.T.bike ? 5.5 : 7.2 + v.T.len * 0.35) + sp * 0.04;
@@ -60,8 +60,8 @@ export class CameraRig {
       fovT = 68 + Math.min(18, sp * 0.3);
     } else {
       const aiming = pl.aiming;
-      dist = aiming ? 3.3 : 4.6;
-      shoulder = aiming ? 0.9 : 0.35;
+      dist = aiming ? 3.7 : 4.6;
+      shoulder = aiming ? 1.15 : 0.35;
       height = aiming ? 1.72 : 1.55;
       const p = pl.char.pos;
       this.target.lerp(new THREE.Vector3(p.x, p.y + height, p.z), 1 - Math.exp(-20 * dt));

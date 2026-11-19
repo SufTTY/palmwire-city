@@ -230,7 +230,11 @@ function runShot(G, name) {
   G.hud.update(0.0001);
   render(G);
   document.title = 'shot-ready';
-  const errs = window.__errors;
+  const errs = window.__errors.slice();
+  if (params.get('stats')) {
+    const info = G.renderer.info.render;
+    errs.push(`draw calls ${info.calls}, triangles ${info.triangles}, build ${G.buildTime.toFixed(0)} ms`);
+  }
   if (errs.length) document.getElementById('errlog').textContent = errs.join('\n');
   // keep presenting the same frozen frame so the screenshot always has it
   const hold = () => { render(G); requestAnimationFrame(hold); };

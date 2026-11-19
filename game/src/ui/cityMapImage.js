@@ -1,6 +1,6 @@
 // Paints the whole city once into an offscreen canvas - sea, beaches, district blocks,
 // building footprints, parks, roads and the bridge - for the minimap and the pause-menu map.
-import { CELL, HALF_ROAD, CITY, BEACH_END, QUAY_END, POINT_END, N } from '../world/cityLayout.js';
+import { CELL, HALF_ROAD, CITY, BEACH_END, QUAY_END, POINT_END } from '../world/cityLayout.js';
 
 export const MAP_MIN = -220;
 export const MAP_SIZE = 1560;   // metres covered by the image
@@ -79,6 +79,5 @@ export function renderCityMap(layout, colliders) {
   g.rotate(Math.PI / 2);
   g.fillText('CORAL STRAND', 0, 0);
   g.restore();
-  void N;
   return c;
 }

@@ -58,7 +58,7 @@ const SCENES = {
     startPlay(G);
     G.sky.setTime(17.25);
     const x = 14 * CELL + 3, z = 8.2 * CELL;
-    const v = driveIn(G, 'sports', x, z, Math.PI, 24, 0xffd400);
+    const v = driveIn(G, 'sports', x, z, Math.PI, 24, 0xff4fa3);
     for (const [j, a, t] of [[8, 30, 'sedan'], [7, 50, 'van'], [6, 20, 'taxi'], [5, 40, 'hatch']]) traffic(G, 14, j, 0, -1, a, t);
     for (const [j, a, t] of [[6, 30, 'pickup'], [7, 10, 'sedan'], [4, 40, 'hatch']]) traffic(G, 14, j, 0, 1, a, t);
     for (const [j, a, t] of [[6, 30, 'sedan'], [5, 50, 'taxi'], [7, 20, 'muscle']]) traffic(G, 13, j, 0, 1, a, t);
@@ -68,6 +68,7 @@ const SCENES = {
     G.hud.showRadio('WAVE 88.1 — Neon Tide');
     return {
       frames: 100,
+      vehicle: v,
       pin(k) { pinVehicle(v, x, z - k * 0.05, Math.PI, 24); },
       final() {
         G.hud.setObjective('Meet Auntie Coral at Suds & Sons');
@@ -85,9 +86,9 @@ const SCENES = {
     G.sky.setTime(18.45);
     const z = 5 * CELL - 3;
     const x = 7.1 * CELL;
-    const v = driveIn(G, 'muscle', x, z, -Math.PI / 2, 30, 0xff8c1a);
+    const v = driveIn(G, 'muscle', x, z, -Math.PI / 2, 30, 0x13c4d0);
     G.wanted.setStars(4, true);
-    const cops = [[x + 10, z + 3.2, 0.12], [x + 19, z - 1.4, -0.08], [x + 31, z + 1.8, 0.06]].map(([cx, cz, dh]) => {
+    const cops = [[x + 8, z + 3.4, 0.14], [x + 15.5, z - 1.6, -0.1], [x + 25, z + 2.2, 0.06]].map(([cx, cz, dh]) => {
       const c = G.police.spawnCruiser(cx, cz, -Math.PI / 2 + dh);
       c.persistent = true;
       return { c, cx, cz, dh };
@@ -98,7 +99,7 @@ const SCENES = {
     traffic(G, 6, 5, 1, 0, 60, 'van');
     traffic(G, 7, 5, -1, 0, 50, 'hatch');
     traffic(G, 7, 4, 0, 1, 40, 'taxi');
-    for (let k = 0; k < 8; k++) ped(G, x - 30 + k * 9, z - 9 + (k % 2) * 0, 0, 'downtown');
+    for (let k = 0; k < 6; k++) ped(G, x + 12 + k * 8, z - 9, 0, 'downtown');
     return {
       frames: 110,
       pin(k) {
@@ -126,7 +127,7 @@ const SCENES = {
         G.hud.notify('Roadblock ahead!', 5);
       },
       camera() {
-        G.cam.override = { pos: new THREE.Vector3(x - 11, 2.6, z - 5.5), look: new THREE.Vector3(x + 14, 1.8, z + 0.8), fov: 62 };
+        G.cam.override = { pos: new THREE.Vector3(x - 9, 3.6, z - 7.5), look: new THREE.Vector3(x + 11, 0.8, z + 3), fov: 62 };
         G.cam.update(0, null);
       },
     };
@@ -189,6 +190,12 @@ const SCENES = {
         G.fx.update(0.016);
         G.hud.setObjective('Take out the Gullcrest Kings (1/6)');
       },
+      camera() {
+        // over the right shoulder, pulled back and up, crosshair on the nearest King
+        const t = squad.members[0].pos;
+        G.cam.override = { pos: new THREE.Vector3(px - 1.7, 2.7, pz - 4.6), look: new THREE.Vector3(t.x, 1.25, t.z), fov: 60 };
+        G.cam.update(0, null);
+      },
     };
   },
 
@@ -223,6 +230,17 @@ const SCENES = {
         G.cam.update(0, null);
       },
     };
+  },
+
+  /** The overview drive seen from higher up: beach, boulevard, hotels and the Halcyon towers. */
+  skyline(G) {
+    const s = SCENES.overview(G);
+    const v = s.vehicle;
+    s.camera = () => {
+      G.cam.override = { pos: new THREE.Vector3(v.pos.x + 26, 30, v.pos.z + 42), look: new THREE.Vector3(v.pos.x - 115, -12, v.pos.z - 150), fov: 62 };
+      G.cam.update(0, null);
+    };
+    return s;
   },
 
   title(G) {

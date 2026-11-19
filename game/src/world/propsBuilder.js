@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import { MeshBuilder } from './meshBuilder.js';
 import { makeRng } from '../core/rng.js';
 import {
-  CELL, HALF_ROAD, CURB_Y, CITY, BEACH_END, QUAY_END, POINT_END, N,
+  CELL, HALF_ROAD, CURB_Y, CITY, BEACH_END, QUAY_END, POINT_END,
 } from './cityLayout.js';
 import {
   palmGeometry, shadeTreeGeometry, streetLampGeometry, lampBulbGeometry, umbrellaGeometry,
@@ -217,7 +217,6 @@ export function buildProps(scene, layout, tex, colliders, spots) {
   });
 
   scene.add(group);
-  void N;
 
   return {
     group, lampMat, boardMat, beam, lampRoom, mastLight,

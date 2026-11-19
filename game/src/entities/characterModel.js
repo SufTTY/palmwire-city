@@ -64,7 +64,8 @@ export function buildCharacterModel(look) {
   torso.castShadow = true;
   body.add(torso);
 
-  const limb = (x, y, top, len, w, color, endColor, endLen) => {
+  // a limb hangs from a pivot (hip or shoulder) so it can swing; endColor paints the shoe or hand
+  const limb = (x, y, len, w, color, endColor, endLen) => {
     const pivot = new THREE.Group();
     pivot.position.set(x, y, 0);
     const b = new MeshBuilder();
@@ -74,13 +75,12 @@ export function buildCharacterModel(look) {
     m.castShadow = true;
     pivot.add(m);
     body.add(pivot);
-    void top;
     return pivot;
   };
-  const legL = limb(-0.12, 0.92, 0, 0.8, 0.19, look.pants, look.shoes, 0.12);
-  const legR = limb(0.12, 0.92, 0, 0.8, 0.19, look.pants, look.shoes, 0.12);
-  const armL = limb(-0.33, 1.5, 0, 0.5, 0.14, look.sleeves ?? look.shirt, look.skin, 0.13);
-  const armR = limb(0.33, 1.5, 0, 0.5, 0.14, look.sleeves ?? look.shirt, look.skin, 0.13);
+  const legL = limb(-0.12, 0.92, 0.8, 0.19, look.pants, look.shoes, 0.12);
+  const legR = limb(0.12, 0.92, 0.8, 0.19, look.pants, look.shoes, 0.12);
+  const armL = limb(-0.33, 1.5, 0.5, 0.14, look.sleeves ?? look.shirt, look.skin, 0.13);
+  const armR = limb(0.33, 1.5, 0.5, 0.14, look.sleeves ?? look.shirt, look.skin, 0.13);
 
   const gun = new THREE.Mesh(weaponGeometry('pistol'), weaponMat);
   gun.position.set(0, -0.6, 0.05);

@@ -2,7 +2,7 @@
 // Marrow Company's Victor Hale buying up Coral Strand with bribes while the Gullcrest Kings
 // do his collecting. Auntie Coral (Suds & Sons) and Dex (Rust & Chrome) give the jobs.
 import { talk, getCar, spawnCar, enterCar, goTo, killSquad, reachWanted, loseWanted, chaseCar, checkpoints, run } from './missionStages.js';
-import { CELL, CITY, HALF_ROAD } from '../world/cityLayout.js';
+import { CELL, HALF_ROAD } from '../world/cityLayout.js';
 
 const L = (key, what = 'door') => (G) => G.landmarks[key][what];
 const at = (x, z, heading = 0) => ({ x, z, heading });
@@ -157,5 +157,3 @@ export const STORY = [
     ],
   },
 ];
-
-export { CITY };
