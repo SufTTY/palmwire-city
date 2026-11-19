@@ -160,14 +160,22 @@ export function chaseCar(type, where, opts = {}) {
       v.health = v.maxHealth = opts.health || v.T.health * 1.3;
       v.fleeAI = { waypoint: null, stuckT: 0, reverseT: 0 };
       ctx.vars.target = v;
+      ctx.vars.fleeing = false;
       ctx.setTarget(v.pos, { radius: 0, color: 0xff3b3b, follow: v, hidden: true });
-      ctx.setObjective(opts.text || 'Wreck the target car');
+      ctx.setObjective(opts.waitText || 'Intercept the target');
     },
     update(ctx, dt) {
       const G = ctx.G;
       const v = ctx.vars.target;
       if (v.isWreck || v.inWater) return 'done';
       const d = v.pos.distanceTo(G.player.pos);
+      if (!ctx.vars.fleeing) {
+        // the target idles until the player closes in, then bolts
+        Object.assign(v.controls, { throttle: 0, brake: 1, steer: 0, handbrake: false });
+        if (d > 90 && v.health >= v.maxHealth) return null;
+        ctx.vars.fleeing = true;
+        if (G.hud) G.hud.notify('They spotted you - don\'t let them get away!', 3);
+      }
       if (d > (opts.escape || 330)) return 'fail:The target got away';
       ctx.setObjective(`${opts.text || 'Wreck the target car'}  ·  ${Math.round(v.health / v.maxHealth * 100)}%`);
       driveFleeing(G, v, dt, opts.speed || 0.82);

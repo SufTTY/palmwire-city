@@ -119,7 +119,7 @@ export const STORY = [
         ['rae', 'Stop it gently?'],
         ['coral', 'Did I say gently?'],
       ]),
-      chaseCar('van', at(6 * CELL, 5 * CELL - 3, -Math.PI / 2), { text: 'Wreck the accountant\'s van', paint: 0x2a2d34, speed: 0.95 }),
+      chaseCar('van', at(6 * CELL, 5 * CELL - 3, -Math.PI / 2), { waitText: 'Intercept the accountant\'s van in Halcyon', text: 'Wreck the accountant\'s van', paint: 0x2a2d34, speed: 0.95 }),
       goTo((G, ctx) => ctx.vars.target.pos.clone(), { text: 'Grab the ledger from the wreck', radius: 3.5, color: 0x3ddc84 }),
       goTo(L('laundromat'), { text: 'Bring the ledger to Coral', radius: 4, needNoWanted: true }),
       talk([

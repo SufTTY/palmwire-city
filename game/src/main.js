@@ -31,6 +31,7 @@ import { SoundEffects } from './audio/soundEffects.js';
 import { WorldSounds } from './audio/worldSounds.js';
 import { Radio } from './audio/radioStations.js';
 import { setupShotScene } from './shots/screenshotScenes.js';
+import { runSelfTest } from './shots/selfTest.js';
 
 const params = new URLSearchParams(location.search);
 const shotName = params.get('shot');
@@ -116,7 +117,19 @@ function boot() {
     if (G.state === 'play') { G.input.requestLock(); G.audio.init(); }
   });
   document.getElementById('loading').classList.add('hidden');
+  G.step = (dt) => step(G, dt);
 
+  if (params.get('selftest')) {
+    try {
+      runSelfTest(G);
+    } catch (err) {
+      window.__errors.push('selftest: ' + (err && err.stack ? err.stack : err));
+      document.getElementById('errlog').textContent = window.__errors.join('\n');
+      document.title = 'selftest CRASHED';
+    }
+    render(G);
+    return;
+  }
   if (shotName) {
     runShot(G, shotName);
     return;
