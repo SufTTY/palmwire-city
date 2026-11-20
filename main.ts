@@ -1,17 +1,18 @@
-// Palmwire City, a gta6-01 entry (Node 22, standard library only). The game is this directory's
-// game/ folder: plain static files a desktop browser loads offline (game/index.html, ~70 ES
-// modules under game/src and three.js vendored at game/vendor, no network request). This program
-// hands it in: it copies game/ and screenshots/ from beside this file to /output and writes
-// /output/dossier.json, the summary the judge reads, with the vendored make.fun library.
-// Palmwire City is an original open-world crime game on a sun-soaked coast: a seeded 14x14-block
-// city (Glasswater towers, the Coral Strip beach and Sunset Pier, Palm Court, Calle Mango, the
-// Saltwater Canal and the Rustline Docks), stealable traffic, pedestrians, gunplay, a five-star
-// police response with roadblocks and an air unit, and the eight-mission story "Saltwater Ledger"
-// with races, jobs, a garage and a crew. screenshots/ holds four real renders (1-... is the cover).
+// Palmwire City: our entry for make.fun's "Make GTA 6" bounty (gta6-01).
 //
-// Serve it locally with `node serve.ts`, then open http://localhost:8080.
-// Outside the grader's container, MAKEFUN_OUTPUT_DIR stands in for /output:
-//   mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
+// The game itself is an original open-world crime game built on three.js and served as static
+// files from game/ (index.html plus ES modules, with three.js vendored so nothing is fetched
+// from the network). It is set on a sunny coastal city with stealable cars, traffic,
+// pedestrians, gunfights, a five-star police response and the eight-mission "Saltwater Ledger"
+// story.
+//
+// This script packages the entry and needs only Node's standard library. It copies game/ and
+// screenshots/ from next to this file into MAKEFUN_OUTPUT_DIR, or /output when that variable is
+// unset. It then writes dossier.json there, a description of the entry produced by buildDossier
+// from the vendored make.fun helper.
+//
+// To play locally, run `node serve.ts` and open http://localhost:8080. To package:
+//   MAKEFUN_OUTPUT_DIR=out node main.ts
 
 import { cpSync, existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';

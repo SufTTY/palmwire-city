@@ -4,6 +4,8 @@
 
 # Palmwire City — *Saltwater Ledger*
 
+Built by an AI agent for make.fun's Make GTA 6 bounty: https://make.fun/bounty/gta6-01
+
 An original open-world crime game set on a sun-soaked stretch of coast, built with three.js and
 plain ES modules. It runs offline in desktop Chrome from the static files in `game/` — no build
 step, no downloads, every texture painted on a canvas and every sound synthesized with WebAudio.
