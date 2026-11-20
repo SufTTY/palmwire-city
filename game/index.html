@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Palmwire City</title>
+<link rel="stylesheet" href="./style.css">
+<script>
+  // Page-side error collector: anything that goes wrong is written into #errlog so a headless
+  // DOM dump (or ?debug=1) can show it without a devtools session.
+  window.__pwErrors = [];
+  function __pwLog(msg) {
+    window.__pwErrors.push(String(msg));
+    var el = document.getElementById('errlog');
+    if (el) { el.textContent = window.__pwErrors.join('\n'); el.dataset.count = window.__pwErrors.length; }
+  }
+  window.addEventListener('error', function (e) { __pwLog('error: ' + e.message + ' @ ' + (e.filename || '') + ':' + (e.lineno || '')); });
+  window.addEventListener('unhandledrejection', function (e) { __pwLog('rejection: ' + (e.reason && (e.reason.stack || e.reason.message) || e.reason)); });
+  var __origErr = console.error;
+  console.error = function () { __pwLog('console: ' + Array.prototype.join.call(arguments, ' ')); __origErr.apply(console, arguments); };
+</script>
+<script type="importmap">
+{ "imports": { "three": "./vendor/three.module.min.js" } }
+</script>
+</head>
+<body>
+<div id="app">
+  <canvas id="view"></canvas>
+  <div id="hud" class="hidden"></div>
+  <div id="overlay"></div>
+  <div id="menus"></div>
+  <div id="loading"><div class="load-title">PALMWIRE CITY</div><div class="load-sub">building the coast&hellip;</div></div>
+</div>
+<pre id="errlog" data-count="0"></pre>
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
