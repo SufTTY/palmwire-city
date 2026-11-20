@@ -203,5 +203,8 @@ export function runScene(g, name) {
   g.hud.update(0);
   g.drawHumans();
   g.frozen = true;
+  g.render();
+  const info = g.renderer.info.render;
+  document.body.dataset.stats = `calls=${info.calls} tris=${info.triangles} cars=${g.vehicles.list.length} peds=${g.peds.list.length}`;
   document.title = 'Palmwire City — ' + name;
 }

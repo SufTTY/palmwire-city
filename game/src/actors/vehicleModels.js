@@ -32,7 +32,7 @@ export function paintMaterial(hex) {
 const GLASS = 0x22313d, TRIM = 0x1a1c1f, CHROME = 0xbfc5ca, HEAD = 0xfff4d6, TAIL = 0xff2030;
 
 function profile(t) {
-  const { len: L, wid: W, hgt: H, wheelR: R } = t;
+  const { len: L, hgt: H, wheelR: R } = t;
   const p = { c: R * 0.55, bodyTop: H * 0.58, cab: [-L * 0.28, L * 0.17], top: [-L * 0.2, L * 0.05], noseDrop: 0.12 };
   switch (t.shape) {
     case 'hatch': p.cab = [-L * 0.44, L * 0.14]; p.top = [-L * 0.42, L * 0.0]; break;
@@ -42,7 +42,6 @@ function profile(t) {
     case 'van': p.bodyTop = H * 0.45; p.cab = [-L * 0.5, L * 0.3]; p.top = [-L * 0.5, L * 0.2]; p.noseDrop = 0.05; break;
     default: break;
   }
-  void W;
   return p;
 }
 

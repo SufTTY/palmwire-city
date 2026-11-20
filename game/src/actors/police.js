@@ -7,7 +7,7 @@ import { CombatAI } from './combatAI.js';
 import { Human } from './human.js';
 import { PoliceHeli } from './policeHeli.js';
 import { Rng } from '../core/rng.js';
-import { BLOCK, CITY } from '../config.js';
+import { CITY } from '../config.js';
 
 const CALLSIGNS = ['MARLIN', 'HERON', 'GULL', 'TARPON', 'EGRET', 'SNAPPER', 'PELICAN', 'BARRACUDA'];
 const COP_LOOK = () => ({ skin: [0xf1c27d, 0xc68642, 0x8d5524, 0xe0ac69][Math.floor(Math.random() * 4)], hair: 0x1a1a1a, shirt: 0x1d3a6e, sleeve: 0x1d3a6e, pants: 0x14213d, cap: 0x14213d });
@@ -140,7 +140,6 @@ export class PoliceSystem {
       });
     }
     g.hud && g.hud.notify('Roadblock reported ahead on ' + g.layout.streetAt(cx, cz), 'police');
-    void BLOCK;
   }
 
   update(dt) {

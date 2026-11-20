@@ -1,0 +1,20 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>png-to-jpeg</title></head>
+<body>
+<pre id="out"></pre>
+<script>
+  // Re-encodes one unedited PNG render as a JPEG with the browser's own encoder.
+  // Usage (headless Chrome with --allow-file-access-from-files):
+  //   png-to-jpeg.html?src=file:///.../shot.png&q=0.86   -> data URL printed into #out
+  const p = new URLSearchParams(location.search);
+  const img = new Image();
+  img.onload = () => {
+    const c = document.createElement('canvas');
+    c.width = img.naturalWidth; c.height = img.naturalHeight;
+    c.getContext('2d').drawImage(img, 0, 0);
+    document.getElementById('out').textContent = c.toDataURL('image/jpeg', Number(p.get('q') || 0.86));
+  };
+  img.onerror = () => { document.getElementById('out').textContent = 'ERROR loading ' + p.get('src'); };
+  img.src = p.get('src');
+</script>
+</body></html>

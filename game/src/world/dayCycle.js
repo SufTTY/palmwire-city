@@ -5,16 +5,16 @@ import { clamp, smoothstep, lerp } from '../core/mathUtil.js';
 
 const KEYS = [
   // hour, zenith, horizon, sun colour, sun intensity, hemi intensity, fog far
-  { h: 0,    zenith: 0x060a1c, horizon: 0x1a2240, sun: 0x8090c0, si: 0.25, hi: 0.35, fog: 650 },
-  { h: 5,    zenith: 0x0b1430, horizon: 0x2c3358, sun: 0x8090c0, si: 0.25, hi: 0.4, fog: 650 },
+  { h: 0,    zenith: 0x060a1c, horizon: 0x1a2240, sun: 0x8090c0, si: 0.12, hi: 0.26, fog: 650 },
+  { h: 5,    zenith: 0x0b1430, horizon: 0x2c3358, sun: 0x8090c0, si: 0.14, hi: 0.3, fog: 650 },
   { h: 6.5,  zenith: 0x4a6fa8, horizon: 0xffb38a, sun: 0xffb27a, si: 1.6, hi: 0.8, fog: 800 },
   { h: 9,    zenith: 0x3d84d6, horizon: 0xcfe3f2, sun: 0xfff1da, si: 2.6, hi: 1.0, fog: 1100 },
   { h: 13,   zenith: 0x2f7ad8, horizon: 0xd8ecf6, sun: 0xfffaf0, si: 3.0, hi: 1.05, fog: 1200 },
   { h: 16.5, zenith: 0x3b78c8, horizon: 0xf4dcb4, sun: 0xffe2b0, si: 2.8, hi: 0.95, fog: 1050 },
   { h: 18.2, zenith: 0x3d64a8, horizon: 0xffb070, sun: 0xffa050, si: 2.6, hi: 0.8, fog: 900 },
   { h: 19.4, zenith: 0x2a3a78, horizon: 0xff7a50, sun: 0xff6a3a, si: 1.3, hi: 0.55, fog: 750 },
-  { h: 20.5, zenith: 0x0e1638, horizon: 0x3a3060, sun: 0x8090c0, si: 0.3, hi: 0.4, fog: 650 },
-  { h: 24,   zenith: 0x060a1c, horizon: 0x1a2240, sun: 0x8090c0, si: 0.25, hi: 0.35, fog: 650 },
+  { h: 20.5, zenith: 0x0e1638, horizon: 0x3a3060, sun: 0x8090c0, si: 0.18, hi: 0.32, fog: 650 },
+  { h: 24,   zenith: 0x060a1c, horizon: 0x1a2240, sun: 0x8090c0, si: 0.12, hi: 0.26, fog: 650 },
 ];
 
 const c1 = new THREE.Color(), c2 = new THREE.Color();
@@ -94,10 +94,10 @@ export class DayCycle {
 
     const g = this.game;
     if (g.sky) g.sky.setColors({ zenith: this.zenith, horizon: this.horizon, sunDir: this.sunDir, sunColor: this.sunColor, night: this.night });
-    if (g.water) g.water.setLighting(this.sunDir, this.sunColor, c1.copy(this.horizon).lerp(this.zenith, 0.4));
-    if (g.buildings) g.buildings.setNightFactor(Math.max(this.night, smoothstep(0.82, 1.0, dayT) * 0.35));
+    if (g.water) g.water.setLighting(this.sunDir, this.sunColor, c1.copy(this.horizon).lerp(this.zenith, 0.4), clamp(k.si / 2.6, 0.12, 1));
+    if (g.buildings) g.buildings.setNightFactor(Math.max(this.night, smoothstep(0.82, 1.0, dayT) * 0.35) * 0.6);
     if (g.props) g.props.setNightFactor(Math.max(this.night, smoothstep(0.9, 1.0, dayT) * 0.5));
     if (g.landmarks) g.landmarks.setNightFactor(this.night);
-    if (g.renderer) g.renderer.toneMappingExposure = lerp(1.0, 1.35, this.night);
+    if (g.renderer) g.renderer.toneMappingExposure = lerp(1.0, 1.15, this.night);
   }
 }

@@ -105,6 +105,14 @@ export class AIDriver {
     }
     const p = g.player;
     if (!p.human.vehicle && p.human.alive) check(p.human.pos.x, p.human.pos.z, 0.5, true);
+    // pedestrians crossing (police in a hurry and racers don't wait for them)
+    if (this.caution >= 0.9) {
+      for (const h of g.peds.list) {
+        if (!h.alive) continue;
+        const dx = h.pos.x - v.pos.x, dz = h.pos.z - v.pos.z;
+        if (dx * dx + dz * dz < 700) check(h.pos.x, h.pos.z, 0.4, true);
+      }
+    }
     return limit * this.caution + desired * (1 - this.caution);
   }
 

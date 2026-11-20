@@ -4,7 +4,7 @@
 import * as THREE from 'three';
 import { GeometryBuilder } from '../render/geometryBuilder.js';
 import { facadeTextures, signTexture } from './textures.js';
-import { LANDMARKS, BLOCK, ROAD_HALF } from '../config.js';
+import { LANDMARKS } from '../config.js';
 import { Rng } from '../core/rng.js';
 
 const CHUNK_BLOCKS = 4;
@@ -147,7 +147,6 @@ export class BuildingMeshes {
         this.group.add(big);
       }
     }
-    void BLOCK; void ROAD_HALF;
   }
 
   /** Night-time window glow: 0 = day, 1 = full night. */

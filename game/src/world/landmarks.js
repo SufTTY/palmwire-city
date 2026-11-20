@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import { GeometryBuilder } from '../render/geometryBuilder.js';
 import { billboardTexture, groundTexture } from './textures.js';
 import { Rng } from '../core/rng.js';
-import { BLOCK, CITY, BEACH_Z0, SHORE_Z, PIER_X, PIER_END_Z, CANAL_COL, EAST_SHORE_X, WATER_Y, BRANDS, ROAD_HALF } from '../config.js';
+import { BLOCK, BEACH_Z0, SHORE_Z, PIER_X, PIER_END_Z, CANAL_COL, EAST_SHORE_X, WATER_Y, BRANDS } from '../config.js';
 
 export class Landmarks {
   constructor(game) {
@@ -150,7 +150,6 @@ export class Landmarks {
       }
     });
     this.addMesh(frames, new THREE.MeshLambertMaterial({ vertexColors: true }), true);
-    void CITY; void ROAD_HALF;
   }
 
   addMesh(gb, mat, shadow = false) {

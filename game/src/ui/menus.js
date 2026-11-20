@@ -59,6 +59,7 @@ export class Menus {
     const g = this.game;
     if (this.state !== 'playing') return;
     this.state = 'paused';
+    this.pausedAt = performance.now();
     g.paused = true;
     this.clear();
     const m = g.missions.active;
@@ -128,6 +129,6 @@ export class Menus {
   update() {
     const g = this.game, input = g.input;
     if (this.state === 'playing' && !g.shotMode && (input.wasPressed('Escape') || input.wasPressed('KeyP'))) this.showPause();
-    else if (this.state === 'paused' && input.wasPressed('KeyP')) this.resume();
+    else if (this.state === 'paused' && performance.now() - this.pausedAt > 400 && (input.wasPressed('KeyP') || input.wasPressed('Escape')) && this.root.querySelectorAll('.modal').length === 1) this.resume();
   }
 }

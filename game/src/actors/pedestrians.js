@@ -11,9 +11,9 @@ export class PedestrianSystem {
     this.rng = new Rng(game.seed * 3 + 11);
     this.list = [];
     this.spawnTimer = 0;
-    game.events.on('gunshot', (e) => this.alarm(e.x, e.z, e.radius || 35, e.shooter));
-    game.events.on('explosion', (e) => this.alarm(e.x, e.z, 50, null));
-    game.events.on('death', (e) => { if (e.human.role !== 'player') this.alarm(e.human.pos.x, e.human.pos.z, 18, e.attacker); });
+    game.events.on('gunshot', (e) => this.alarm(e.x, e.z, e.radius || 35));
+    game.events.on('explosion', (e) => this.alarm(e.x, e.z, 50));
+    game.events.on('death', (e) => { if (e.human.role !== 'player') this.alarm(e.human.pos.x, e.human.pos.z, 18); });
   }
 
   loopFor(x, z) {
@@ -54,7 +54,8 @@ export class PedestrianSystem {
     h.ai.from = { x: fx, z: fz };
   }
 
-  alarm(x, z, radius, source) {
+  /** Everyone within radius panics: cower if very close, otherwise run. */
+  alarm(x, z, radius) {
     for (const h of this.list) {
       if (!h.alive) continue;
       const d = Math.hypot(h.pos.x - x, h.pos.z - z);
@@ -63,7 +64,6 @@ export class PedestrianSystem {
         else this.flee(h, x, z, this.rng.range(5, 9));
       }
     }
-    void source;
   }
 
   randomSidewalkPoint(focus, minD, maxD) {

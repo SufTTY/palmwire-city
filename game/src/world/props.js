@@ -3,7 +3,7 @@
 import * as THREE from 'three';
 import { frondTexture, softDotTexture, containerTexture } from './textures.js';
 import { Rng } from '../core/rng.js';
-import { BLOCK, GRID, CITY, ROAD_HALF, WALK, SIDEWALK_Y, BEACH_Z0, SHORE_Z, CANAL_COL, PIER_X } from '../config.js';
+import { BLOCK, GRID, ROAD_HALF, WALK, SIDEWALK_Y, BEACH_Z0, SHORE_Z, CANAL_COL, PIER_X } from '../config.js';
 
 const M = new THREE.Matrix4(), Q = new THREE.Quaternion(), S = new THREE.Vector3(), P = new THREE.Vector3(), E = new THREE.Euler();
 
@@ -292,7 +292,6 @@ export class Props {
     });
     inst.castShadow = inst.receiveShadow = true;
     this.group.add(inst);
-    void CITY;
   }
 
   setNightFactor(f) {

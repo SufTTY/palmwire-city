@@ -227,8 +227,8 @@ export class Game {
     this.audio.update(sdt);
   }
 
+  /** While paused or frozen: keep the picture and HUD steady, let audio fade. */
   renderOnlyUpdate(dt) {
-    this.water.update(this.frozen ? 0 : 0);
     this.sky.update();
     this.hud.dialogue.update(0);
     this.audio.update(dt);

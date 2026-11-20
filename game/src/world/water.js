@@ -30,6 +30,7 @@ const fragmentShader = /* glsl */`
   uniform vec3 uSkyColor;
   uniform vec3 uDeep;
   uniform vec3 uShallow;
+  uniform float uLight;
   varying vec3 vWorld;
   varying float vWave;
   #include <fog_pars_fragment>
@@ -46,7 +47,7 @@ const fragmentShader = /* glsl */`
     vec3 n = normalize(vec3(-g.x, 1.0, -g.y));
     vec3 v = normalize(cameraPosition - vWorld);
     float fres = pow(1.0 - max(dot(n, v), 0.0), 3.0);
-    vec3 base = mix(uDeep, uShallow, clamp(vWave * 0.8 + 0.45, 0.0, 1.0));
+    vec3 base = mix(uDeep, uShallow, clamp(vWave * 0.8 + 0.45, 0.0, 1.0)) * uLight;
     vec3 col = mix(base, uSkyColor, clamp(fres * 0.85 + 0.08, 0.0, 1.0));
     vec3 h = normalize(uSunDir + v);
     float spec = pow(max(dot(n, h), 0.0), 220.0) * 6.0 + pow(max(dot(n, h), 0.0), 24.0) * 0.25;
@@ -72,6 +73,7 @@ export class Water {
         uSkyColor: { value: new THREE.Color(0.6, 0.75, 0.9) },
         uDeep: { value: new THREE.Color(0x0b4f6c) },
         uShallow: { value: new THREE.Color(0x1f9aa8) },
+        uLight: { value: 1 },
       },
     ]);
     this.material = new THREE.ShaderMaterial({ uniforms: this.uniforms, vertexShader, fragmentShader, fog: true });
@@ -85,7 +87,8 @@ export class Water {
 
   update(dt) { this.uniforms.uTime.value += dt; }
 
-  setLighting(sunDir, sunColor, skyColor) {
+  setLighting(sunDir, sunColor, skyColor, light = 1) {
+    this.uniforms.uLight.value = light;
     this.uniforms.uSunDir.value.copy(sunDir);
     this.uniforms.uSunColor.value.copy(sunColor);
     this.uniforms.uSkyColor.value.copy(skyColor);

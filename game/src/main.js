@@ -15,6 +15,7 @@ window.__palmwire = game;
 document.getElementById('loading').remove();
 
 if (shot) runScene(game, shot);
+else if (params.get('selftest')) { const { runSelfTest } = await import('./shots/selfTest.js'); await runSelfTest(game); }
 else if (params.get('play')) game.startPlaying(params.get('play') === 'continue');
 else game.ui.menus.showTitle();
 
@@ -31,11 +32,11 @@ function frame(now) {
   }
   // lightweight stats for headless checks and ?debug=1
   frames++; statT += dt;
-  if (statT > 1) {
+  if (frames % 10 === 0) {
     const info = game.renderer.info.render;
-    document.body.dataset.stats = `fps=${Math.round(frames / statT)} calls=${info.calls} tris=${info.triangles} cars=${game.vehicles.list.length} peds=${game.peds.list.length}`;
-    frames = 0; statT = 0;
+    document.body.dataset.stats = `fps=${Math.round(frames / Math.max(statT, 1e-3))} calls=${info.calls} tris=${info.triangles} cars=${game.vehicles.list.length} peds=${game.peds.list.length} frames=${frames}`;
   }
+  if (statT > 2) { frames = 0; statT = 0; }
   game.input.endFrame();
   requestAnimationFrame(frame);
 }
